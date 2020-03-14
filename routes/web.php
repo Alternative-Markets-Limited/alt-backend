@@ -31,4 +31,5 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->post('/user/profile', 'ProfileController@createProfile');
     $router->get('/user/profile', 'ProfileController@getProfile');
     $router->put('/user/profile', 'ProfileController@updateProfile');
+    $router->delete('user/profile', 'ProfileController@deleteUser');
 });
