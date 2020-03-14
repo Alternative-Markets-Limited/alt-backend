@@ -48,12 +48,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         //validate incoming request
-        $this->validate($request, [
-            'firstname' => 'required|string',
-            'lastname' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required',
-        ]);
+        $this->validate($request, User::$registrationRules);
 
         try {
             $user = new User;
@@ -98,10 +93,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $this->validate($request, [
-            'email' => 'required|email|string',
-            'password' => 'required|string'
-        ]);
+        $this->validate($request, User::$loginRules);
         $credentials = $request->only(['email', 'password']);
         $credentials['is_verified'] = 1;
         try {
