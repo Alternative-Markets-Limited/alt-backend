@@ -134,6 +134,10 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
+            //delete image from cloudinary if it exists
+            if ($user->public_id) {
+                Uploader::destroy($user->public_id);
+            }
             $user->delete();
             return response()->json(['success' => true, 'message' => 'User deleted successfully'], 200);
         } catch (\Exception $e) {
