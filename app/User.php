@@ -22,7 +22,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'firstname', 'lastname', 'email', 'is_verified'
+        'firstname', 'lastname', 'email', 'is_verified', 'avatar', 'phone', 'birthday',
+        'bvn', 'occupation', 'address', 'public_id'
     ];
 
     /**
@@ -33,6 +34,41 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+
+    public static $registrationRules = [
+        'firstname' => 'required|string|max:255',
+        'lastname' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:6|regex:/^[a-zA-Z0-9]{6,22}$/',
+    ];
+
+    public static $loginRules = [
+        'email' => 'required|email|string',
+        'password' => 'required|string'
+    ];
+
+    public static $updateProfileRules = [
+        'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'phone' => 'required|regex:/^[0]\\d{10}$/|min:10',
+        'address' => 'max:255',
+        'occupation' => 'max:255',
+    ];
+
+    public static $createProfileRules = [
+        'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'phone' => 'required|regex:/^[0]\\d{10}$/|min:10',
+        'address' => 'max:255',
+        'occupation' => 'max:255',
+        'birthday' => 'required|date_format:Y-m-d|before:today',
+        'bvn' => 'required|numeric',
+    ];
+
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
