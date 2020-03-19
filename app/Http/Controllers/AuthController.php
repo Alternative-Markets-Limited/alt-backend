@@ -34,7 +34,6 @@ class AuthController extends Controller
     {
         $data = [
             'token' => $token,
-            'message' => '',
             'token_type' => 'bearer',
             'expires_in' => Auth::factory()->getTTL() * 30
         ];
