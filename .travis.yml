@@ -1,20 +1,23 @@
 # .travis.yml
+dist: precise
+
 language: php
-dist: bionic
 
 php:
-  - 7.3
+  - 7.2
 
-services:
-  - mysql
+cache:
+  directories:
+    - node_modules
+    - vendor
 
 before_script:
   - cp .env.travis .env
-  - mysql -e 'create database homestead_test;'
+  - sudo mysql -e 'CREATE DATABASE testing;'
   - composer self-update
   - composer install --no-interaction
   - php artisan key:generate
-  - php artisan migrate
+  - php artisan migrate --no-interaction -vvv
 
 script:
   - vendor/bin/phpunit

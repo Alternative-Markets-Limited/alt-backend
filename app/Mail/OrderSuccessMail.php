@@ -7,10 +7,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class VerificationEmail extends Mailable
+class OrderSuccessMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $data;
+
     /**
      * Create a new message instance.
      *
@@ -29,8 +30,8 @@ class VerificationEmail extends Mailable
     public function build()
     {
         return $this->from(getenv('MAIL_FROM_ADDRESS'), getenv('MAIL_FROM_NAME'))
-            ->subject('Please verify your email address.')
-            ->view('email.verify')
+            ->subject('Thank you for investing with Alt')
+            ->view('email.order')
             ->with('data', $this->data);
     }
 }

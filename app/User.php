@@ -23,7 +23,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $fillable = [
         'firstname', 'lastname', 'email', 'is_verified', 'avatar', 'phone', 'birthday',
-        'bvn', 'occupation', 'address', 'public_id'
+        'bvn', 'occupation', 'address', 'public_id', 'admin'
     ];
 
     /**
@@ -88,5 +88,15 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * The sets a relationship with orders
+     *
+     * @var array
+     */
+    public function orders()
+    {
+        return $this->hasMany('App\Model\Order');
     }
 }

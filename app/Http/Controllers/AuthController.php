@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use App\User;
 
 class AuthController extends Controller
@@ -31,12 +32,13 @@ class AuthController extends Controller
 
     protected function respondWithToken($token)
     {
-        return response()->json([
+        $data = [
             'token' => $token,
-            'message' => 'Login Successful',
+            'message' => '',
             'token_type' => 'bearer',
             'expires_in' => Auth::factory()->getTTL() * 30
-        ], 200);
+        ];
+        return $this->sendResponse($data, 'Login Successful', 200);
     }
 
     /**
@@ -47,10 +49,12 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        //validate incoming request
-        $this->validate($request, User::$registrationRules);
-
         try {
+            //validate incoming request
+            $validator = Validator::make($request->all(), User::$registrationRules);
+            if ($validator->fails()) {
+                return $this->sendError('validation error', $validator->errors(), 422);
+            }
             $user = new User;
             $user->firstname = $request->input('firstname');
             $user->lastname = $request->input('lastname');
@@ -68,20 +72,17 @@ class AuthController extends Controller
                 'verification_code' => $verification_code
             ];
 
-            Mail::to($user->email, $user->name)->send(new VerificationEmail($data));
+            Mail::to($user->email, $user->firstname)->send(new VerificationEmail($data));
 
             //return successful
-            return response()->json([
-                'user_id' => $user->id,
-                'success' => true,
-                'message' => 'Thanks for signing up! Please check your email to complete your registration.'
-            ], 201);
+            return $this->sendResponse(
+                $user,
+                'Thanks for signing up! Please check your email to complete your registration.',
+                201
+            );
         } catch (\Exception $e) {
             //return error
-            return response()->json([
-                'error' => $e->getMessage(),
-                'success' => false
-            ], 409);
+            return $this->sendError('registration error', $e->getMessage(), 409);
         }
     }
 
@@ -93,19 +94,23 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $this->validate($request, User::$loginRules);
-        $credentials = $request->only(['email', 'password']);
-        $credentials['is_verified'] = 1;
         try {
+            //validate incoming request
+            $validator = Validator::make($request->all(), User::$loginRules);
+            if ($validator->fails()) {
+                return $this->sendError('validation error', $validator->errors(), 422);
+            }
+            $credentials = $request->only(['email', 'password']);
+            $credentials['is_verified'] = 1;
             if (!$token = Auth::attempt($credentials)) {
-                return response()->json(['error' => 'Email or Password is invalid', 'success' => false], 404);
+                return $this->sendError('Email or Password is invalid', null, 404);
             }
         } catch (Tymon\TokenExpiredException $e) {
-            return response()->json(['token_expired' => $e->getMessage(),  'success' => false], 500);
+            return $this->sendError('token_expired', $e->getMessage(), 500);
         } catch (Tymon\TokenInvalidException $e) {
-            return response()->json(['token_invalid' => $e->getMessage(), 'success' => false], 500);
+            return $this->sendError('token_invalid', $e->getMessage(), 500);
         } catch (Tymon\JWTException $e) {
-            return response()->json(['token_absent' => $e->getMessage(), 'success' => false], 500);
+            return $this->sendError('token_absent', $e->getMessage(), 500);
         }
         return $this->respondWithToken($token);
     }
@@ -121,9 +126,9 @@ class AuthController extends Controller
 
         try {
             $user = Auth::user();
-            return response()->json(['user' => $user, 'message' => 'User Fetched', 'success' => true], 200);
+            return $this->sendResponse($user, 'User Fetched');
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage(), 'success' => false], 409);
+            return $this->sendError('error', $e->getMessage(), 409);
         }
     }
 
@@ -136,9 +141,9 @@ class AuthController extends Controller
     {
         try {
             Auth::logout();
-            return response()->json(['message' => 'Successfully Logged out', 'success' => true], 200);
+            return $this->sendResponse(null, 'Successfully Logged out');
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage(), 'success' => false], 409);
+            return $this->sendError('error', $e->getMessage(), 409);
         }
     }
 
@@ -153,16 +158,13 @@ class AuthController extends Controller
         if ($check) {
             $user = User::find($check->user_id);
             if ($user->is_verified == 1) {
-                return response()->json(['success' => true, 'message' => 'Account already verified']);
+                return $this->sendResponse(null, 'Account already verified');
             }
             $user->update(['is_verified' => 1]);
             DB::table('user_verifications')->where('token', $verification_code)->delete();
-            return response()->json([
-                'success' => true,
-                'message' => "You have successfully verified your email address"
-            ]);
+            return $this->sendResponse(null, 'You have successfully verified your email address');
         }
-        return response()->json(['success' => false, 'error' => 'Verification code is invalid']);
+        return $this->sendError('Verification code is invalid', null, 403);
     }
 
     /**
@@ -175,10 +177,7 @@ class AuthController extends Controller
         $check = DB::table('user_verifications')->where('user_id', $user_id)->first();
         //check if verification does not exist
         if (!$check) {
-            return response()->json([
-                'success' => false,
-                'error' => 'Your account does not exist or you have verified your account'
-            ]);
+            return $this->sendError('Your account does not exist or you have verified your account', null, 404);
         }
         //resend mail to user email
         try {
@@ -188,10 +187,10 @@ class AuthController extends Controller
                 'lastname' => $user->lastname,
                 'verification_code' => $check->token,
             ];
-            Mail::to($user->email, $user->name)->send(new VerificationEmail($data));
-            return response()->json(['success' => true, 'message' => 'Verification code has been resent successfully']);
+            Mail::to($user->email, $user->firstname)->send(new VerificationEmail($data));
+            return $this->sendResponse(null, 'Verification code has been resent successfully');
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()]);
+            return $this->sendError('verification error', $e->getMessage(), 409);
         }
     }
 }

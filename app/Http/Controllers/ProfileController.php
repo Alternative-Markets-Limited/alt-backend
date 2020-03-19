@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Cloudinary\Uploader;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 use App\User;
 
 class ProfileController extends Controller
@@ -52,8 +53,11 @@ class ProfileController extends Controller
             $user = Auth::user();
 
             //validate
-            $this->validate($request, User::$createProfileRules);
-
+            //validate incoming request
+            $validator = Validator::make($request->all(), User::$createProfileRules);
+            if ($validator->fails()) {
+                return $this->sendError('validation error', $validator->errors(), 422);
+            }
             //check if avatar exists
             if ($request->has('avatar')) {
                 $extension = $request->avatar->extension();
@@ -68,9 +72,9 @@ class ProfileController extends Controller
             $user->bvn = $request->input('bvn'); //TODO: verify bvn before sending in the frontend
             $user->save();
 
-            return response()->json(['success' => true, 'message' => 'Profile created successfully'], 200);
+            return $this->sendResponse($user, 'Profile created successfully');
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 400);
+            return $this->sendError('error', $e->getMessage(), 409);
         }
     }
 
@@ -83,12 +87,9 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
-            return response()->json(
-                ['success' => true, 'message' => 'Profile fetched successfully', 'user' => $user],
-                200
-            );
+            return $this->sendResponse($user, 'Profile fetched successfully');
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 400);
+            return $this->sendError('error', $e->getMessage(), 409);
         }
     }
 
@@ -102,12 +103,15 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
-
-            //validate request
-            $this->validate($request, User::$updateProfileRules);
-
+            //validate incoming request
+            $validator = Validator::make($request->all(), User::$updateProfileRules);
+            if ($validator->fails()) {
+                return $this->sendError('validation error', $validator->errors(), 422);
+            }
             if ($request->has('avatar')) {
-                Uploader::destroy($user->public_id);
+                if ($user->public_id) {
+                    Uploader::destroy($user->public_id);
+                }
                 $extension = $request->avatar->extension();
                 $image = $this->uploadImage($request->file('avatar')->getRealPath(), $user->firstname, $extension);
                 $user->public_id = $image['public_id'];
@@ -117,9 +121,10 @@ class ProfileController extends Controller
             $user->address = $request->input('address');
             $user->occupation = $request->input('occupation');
             $user->save();
-            return response()->json(['success' => true, 'message' => 'Profile updated successfully'], 200);
+
+            return $this->sendResponse($user, 'Profile updated successfully');
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 409);
+            return $this->sendError('error', $e->getMessage(), 409);
         }
     }
 
@@ -139,9 +144,9 @@ class ProfileController extends Controller
                 Uploader::destroy($user->public_id);
             }
             $user->delete();
-            return response()->json(['success' => true, 'message' => 'User deleted successfully'], 200);
+            return $this->sendResponse(null, 'User deleted successfully');
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 409);
+            return $this->sendError('error', $e->getMessage(), 409);
         }
     }
 }
