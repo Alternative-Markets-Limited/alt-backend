@@ -81,11 +81,12 @@ Cloudinary::config(array(
 */
 
 // $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
+//     'admin' => \App\Http\Middleware\AdminMiddleware::class
 // ]);
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
+    'admin' => \App\Http\Middleware\AdminMiddleware::class
 ]);
 
 /*
