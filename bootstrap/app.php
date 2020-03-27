@@ -80,9 +80,9 @@ Cloudinary::config(array(
 |
 */
 
-// $app->middleware([
-//     'admin' => \App\Http\Middleware\AdminMiddleware::class
-// ]);
+$app->middleware([
+    App\Http\Middleware\CorsMiddleware::class
+]);
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
