@@ -95,6 +95,8 @@ class PropertiesController extends Controller
             $property->location = $request->input('location');
             $property->investment_population = $request->input('investment_population');
             $property->net_rental_yield = $request->input('net_rental_yield');
+            $property->min_yield = $request->input('min_yield');
+            $property->max_yield = $request->input('max_yield');
             $property->holding_period = $request->input('holding_period');
             $property->min_fraction_price = $request->input('min_fraction_price');
             $property->max_fraction_price = $request->input('max_fraction_price');
@@ -193,6 +195,8 @@ class PropertiesController extends Controller
             $property->location = $request->input('location');
             $property->investment_population = $request->input('investment_population');
             $property->net_rental_yield = $request->input('net_rental_yield');
+            $property->min_yield = $request->input('min_yield');
+            $property->max_yield = $request->input('max_yield');
             $property->holding_period = $request->input('holding_period');
             $property->min_fraction_price = $request->input('min_fraction_price');
             $property->max_fraction_price = $request->input('max_fraction_price');
@@ -253,7 +257,10 @@ class PropertiesController extends Controller
                 'investment_population',
                 'net_rental_yield',
                 'min_fraction_price',
-                'category_id'
+                'min_yield',
+                'max_yield',
+                'category_id',
+                'about'
             )->get();
 
             return $this->sendResponse($properties, 'Property fetched successfully');
@@ -270,11 +277,11 @@ class PropertiesController extends Controller
     public function showProperty($id)
     {
         try {
-            $property = Property::find($id);
+            $property = Property::with('category')->find($id);
             if (!$property) {
                 return $this->sendError('Property not found', null, 404);
             }
-            return $this->sendResponse($property->with('category')->get(), 'Property fetched successfully');
+            return $this->sendResponse($property, 'Property fetched successfully');
         } catch (\Exception $e) {
             return $this->sendError('error', $e->getMessage(), 409);
         }

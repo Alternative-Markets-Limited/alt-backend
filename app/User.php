@@ -11,10 +11,17 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Laravel\Lumen\Auth\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Notifications\ResetPassword as ResetPasswordNotification;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject, CanResetPasswordContract
 {
     use Authenticatable, Authorizable, CanResetPassword, Notifiable;
+
+    public function sendPasswordResetNotification($token)
+    {
+        // Your your own implementation.
+        $this->notify(new ResetPasswordNotification($token));
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -45,7 +52,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'firstname' => 'required|string|max:255',
         'lastname' => 'required|string|max:255',
         'email' => 'required|email|unique:users',
-        'password' => 'required|min:6|regex:/^[a-zA-Z0-9]{6,22}$/',
+        'password' => 'required|min:6|max:22',
     ];
 
     public static $loginRules = [
