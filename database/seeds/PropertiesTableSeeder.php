@@ -19,6 +19,8 @@ class PropertiesTableSeeder extends Seeder
             'location' => 'Lorem ipsum the location here',
             'investment_population' => 1000,
             'net_rental_yield' => 1.24,
+            'min_yield' => 11,
+            'max_yield' => 15,
             'holding_period' => 1,
             'min_fraction_price' => 100000,
             'max_fraction_price' => 900000,

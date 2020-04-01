@@ -21,7 +21,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->post('/auth/logout', 'AuthController@logout');
     //Email
     //handle frontend
-    $router->post('/auth/email/verify/{verification_code}', ['as' => 'verify', 'uses' => 'AuthController@verifyUser']);
+    $router->get('/auth/email/verify/{verification_code}', ['as' => 'verify', 'uses' => 'AuthController@verifyUser']);
     $router->post('/auth/email/verify/request_verification/{user_id}', 'AuthController@requestVerification');
     //Forgot password
     //handle frontend

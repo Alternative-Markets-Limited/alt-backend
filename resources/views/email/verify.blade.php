@@ -112,6 +112,12 @@
             text-align: right;
         }
 
+        .logo {
+            margin-bottom: 15px;
+            height: 165px;
+            width: 150px;
+        }
+
         /* Type ------------------------------ */
         h1 {
             margin-top: 0;

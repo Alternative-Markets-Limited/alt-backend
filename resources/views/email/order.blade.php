@@ -108,6 +108,12 @@
             padding: 35px;
         }
 
+        .logo {
+            margin-bottom: 15px;
+            height: 165px;
+            width: 150px
+        }
+
         .align-right {
             text-align: right;
         }

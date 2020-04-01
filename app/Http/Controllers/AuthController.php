@@ -161,9 +161,11 @@ class AuthController extends Controller
             }
             $user->update(['is_verified' => 1]);
             DB::table('user_verifications')->where('token', $verification_code)->delete();
-            return $this->sendResponse(null, 'You have successfully verified your email address');
+            $successPath = getenv('WEBSITE_URL') . '/verification-successful';
+            return redirect()->to($successPath);
         }
-        return $this->sendError('Verification code is invalid', null, 403);
+        $errorPath = getenv('WEBSITE_URL') . '/verification-error';
+        return redirect()->to($errorPath);
     }
 
     /**
@@ -176,7 +178,7 @@ class AuthController extends Controller
         $check = DB::table('user_verifications')->where('user_id', $user_id)->first();
         //check if verification does not exist
         if (!$check) {
-            return $this->sendError('Your account does not exist or you have verified your account', null, 404);
+            return $this->sendError('error', 'Your account does not exist or you have verified your account', 404);
         }
         //resend mail to user email
         try {
