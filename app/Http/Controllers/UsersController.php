@@ -27,7 +27,7 @@ class UsersController extends Controller
     {
         try {
             $user = User::find(Auth::id());
-            $user_orders = $user->orders()->with(['property'])->get();
+            $user_orders = $user->orders()->with(['property.category'])->get();
             return $this->sendResponse($user_orders, 'Orders fetched successfully');
         } catch (\Exception $e) {
             return $this->sendError('error', $e->getMessage(), 409);

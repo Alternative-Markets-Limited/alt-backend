@@ -15,7 +15,7 @@ class Property extends Model
     protected $fillable = [
         'name', 'image', 'about', 'brochure', 'location', 'investment_population',
         'net_rental_yield', 'holding_period', 'min_fraction_price', 'max_fraction_price',
-        'category_id', 'gallery', 'facility', 'video'
+        'category_id', 'gallery', 'facility', 'video', 'min_yield', 'max_yield'
     ];
 
     /**
@@ -64,6 +64,8 @@ class Property extends Model
         'location' => 'required|string|max:255',
         'investment_population' => 'required|numeric',
         'net_rental_yield' => 'required|numeric',
+        'min_yield' => 'required|numeric',
+        'max_yield' => 'required|numeric',
         'holding_period' => 'required|numeric',
         'min_fraction_price' => 'required|numeric|gte:100000',
         'max_fraction_price' => 'required|numeric|lte:15000000',

@@ -18,9 +18,9 @@ class CreateOrdersTable extends Migration
             $table->integer('property_id');
             $table->integer('user_id');
             $table->bigInteger('fractions_qty');
-            $table->decimal('price');
+            $table->bigInteger('price');
             $table->dateTime('end_date');
-            $table->decimal('expected_returns')->nullable();
+            $table->bigInteger('expected_returns')->nullable();
             $table->boolean('active')->default(0);
             $table->timestamps();
             $table->softDeletes();
