@@ -2,8 +2,10 @@
 
 namespace App\Console;
 
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\DB;
 
 class Kernel extends ConsoleKernel
 {
@@ -13,7 +15,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        \Laravelista\LumenVendorPublish\VendorPublishCommand::class,
     ];
 
     /**
@@ -24,6 +26,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //
+        $schedule->call(function () {
+            DB::table('orders')->whereDate('end_date', '<', Carbon::now())->update(['active' => 1]);
+        })->everyMinute();
     }
 }
