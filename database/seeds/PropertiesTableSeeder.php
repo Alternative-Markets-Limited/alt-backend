@@ -18,7 +18,7 @@ class PropertiesTableSeeder extends Seeder
             'brochure' => 'https://res.cloudinary.com/altdotng/image/upload/v1584185412/alt_avatars/default-profile_an4tnd.png',
             'location' => 'Lorem ipsum the location here',
             'investment_population' => 1000,
-            'net_rental_yield' => 1.24,
+            'net_rental_yield' => 12,
             'min_yield' => 11,
             'max_yield' => 15,
             'holding_period' => 1,
