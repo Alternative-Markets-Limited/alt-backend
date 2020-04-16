@@ -76,6 +76,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'bvn' => 'required|numeric',
     ];
 
+    public static $verifyBvnRules = [
+        'surname' => 'required',
+        'dob' => 'required',
+        'bvn' => 'required',
+        'callbackURL' => 'required',
+    ];
+
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
