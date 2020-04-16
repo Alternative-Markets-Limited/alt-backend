@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Cloudinary\Uploader;
 use Illuminate\Support\Str;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Validator;
 use App\User;
 
@@ -146,6 +147,47 @@ class ProfileController extends Controller
             $user->delete();
             return $this->sendResponse(null, 'User deleted successfully');
         } catch (\Exception $e) {
+            return $this->sendError('error', $e->getMessage(), 409);
+        }
+    }
+
+    /**
+     * Verify bvn from verify.ng
+     *
+     * @param  Array  $data
+     * @return \Illuminate\Http\Response
+     */
+    public function verifyBvn(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), User::$verifyBvnRules);
+            if ($validator->fails()) {
+                return $this->sendError('validation error', $validator->errors(), 422);
+            }
+            //get the firstname, surname, bvn, dob callbackURL
+            $surname = $request->input('surname');
+            $dob = $request->input('dob');
+            $bvn = $request->input('bvn');
+            $callbackURL = $request->input('callbackURL');
+
+            $client = new Client();
+            $url = getenv('VERIFY_NG_URL');
+            $res = $client->request('POST', $url, [
+                'json' => [
+                    'surname' => $surname,
+                    'dob' => $dob,
+                    'bvn' => $bvn,
+                    'callbackURL' => $callbackURL,
+                ],
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'api-key' => getenv('VERIFY_NG_API_KEY'),
+                    'userid' => getenv('VERIFY_NG_USER_ID')
+                ]
+            ]);
+            $data = collect(json_decode(utf8_decode($res->getBody()->getContents()), true));
+            return $this->sendResponse($data, 'Verification Request');
+        } catch (\Exception  $e) {
             return $this->sendError('error', $e->getMessage(), 409);
         }
     }

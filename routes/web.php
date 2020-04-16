@@ -28,6 +28,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->post('/password/email', 'PasswordController@postEmail');
     $router->post('/password/reset/{token}', ['as' => 'password.reset', 'uses' => 'PasswordController@postReset']);
     //User Profiles
+    $router->post('/user/bvn', 'ProfileController@verifyBvn');
     $router->post('/user/profile', 'ProfileController@createProfile');
     $router->get('/user/profile', 'ProfileController@getProfile');
     $router->put('/user/profile', 'ProfileController@updateProfile');
