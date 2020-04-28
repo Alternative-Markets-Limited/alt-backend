@@ -18,6 +18,8 @@ class CreateUsersTable extends Migration
             $table->string('firstname');
             $table->string('lastname');
             $table->string('email')->unique()->notNullable();
+            $table->integer('referrer_id')->nullable();
+            $table->string('referral_token')->unique();
             $table->string('password');
             $table->boolean('admin')->default(0);
             $table->timestamps();

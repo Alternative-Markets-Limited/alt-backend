@@ -17,7 +17,7 @@ class Category extends Model
     /**
      * The sets a relationship with properties
      *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function property()
     {
