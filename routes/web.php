@@ -33,6 +33,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->get('/user/profile', 'ProfileController@getProfile');
     $router->put('/user/profile', 'ProfileController@updateProfile');
     $router->delete('user/profile', 'ProfileController@deleteUser');
+    $router->get('users/points', 'ProfileController@getPoints');
     //Properties
     $router->get('property', 'PropertiesController@allProperties');
     $router->get('property/{id}', 'PropertiesController@showProperty');

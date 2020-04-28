@@ -21,6 +21,7 @@ class AddUserProfileFields extends Migration
             $table->string('occupation')->nullable();
             $table->text('address')->nullable();
             $table->string('public_id')->nullable();
+            $table->bigInteger('points')->nullable()->default(0);
         });
     }
 

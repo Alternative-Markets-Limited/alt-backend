@@ -32,7 +32,7 @@ class Property extends Model
     /**
      * The sets a relationship with categories
      *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function category()
     {
@@ -43,7 +43,7 @@ class Property extends Model
     /**
      * The sets a relationship with orders
      *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function order()
     {

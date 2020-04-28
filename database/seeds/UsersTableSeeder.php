@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Ramsey\Uuid\Uuid;
 
 class UsersTableSeeder extends Seeder
 {
@@ -17,6 +18,7 @@ class UsersTableSeeder extends Seeder
             'lastname' => 'Adesanya',
             'email' => 'adesanyaayokunle@gmail.com',
             'password' => app('hash')->make('password'),
+            'referral_token' =>  Uuid::uuid1(),
             'is_verified' => 1,
             'admin' => 1,
             'avatar' => 'https://res.cloudinary.com/altdotng/image/upload/v1584185412/alt_avatars/default-profile_an4tnd.png'
@@ -27,6 +29,7 @@ class UsersTableSeeder extends Seeder
             'lastname' => 'Doe',
             'email' => 'user@gmail.com',
             'password' => app('hash')->make('password'),
+            'referral_token' =>  Uuid::uuid1(),
             'is_verified' => 1,
             'admin' => 0,
             'avatar' => 'https://res.cloudinary.com/altdotng/image/upload/v1584185412/alt_avatars/default-profile_an4tnd.png'

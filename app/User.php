@@ -30,7 +30,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $fillable = [
         'firstname', 'lastname', 'email', 'is_verified', 'avatar', 'phone', 'birthday',
-        'bvn', 'occupation', 'address', 'public_id', 'admin'
+        'bvn', 'occupation', 'address', 'public_id', 'admin', 'referrer_id', 'referral_token'
     ];
 
     /**
@@ -105,9 +105,46 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * The sets a relationship with orders
+     * The accessors to append to the model's array form.
      *
      * @var array
+     */
+    protected $appends = ['referral_link'];
+
+    /**
+     * Get the user's referral link.
+     *
+     * @return string
+     */
+    public function getReferralLinkAttribute()
+    {
+        return $this->referral_link = getenv('WEBSITE_URL') . "/register/ref/{$this->referral_token}";
+    }
+
+    /**
+     * A user has a referrer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function referrer()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    /**
+     * A user has many referrals.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function referrals()
+    {
+        return $this->hasMany('App\User');
+    }
+
+    /**
+     * The sets a relationship with orders
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function orders()
     {
