@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\OrderSuccessMail;
+use App\Mail\TwoPointsMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use GuzzleHttp\Client;
 use App\Model\Order;
 use App\Model\Property;
+use App\User;
 
 class OrdersController extends Controller
 {
@@ -64,6 +66,10 @@ class OrdersController extends Controller
                 return $this->sendError('Fractions requested in not available', null, 409);
             }
 
+            //check order
+            $auth_user = User::find(Auth::id());
+            $check_order = $auth_user->orders()->get();
+
             $order = new Order;
             $order->property_id = $request->input('property_id');
             $order->user_id = Auth::id();
@@ -93,6 +99,22 @@ class OrdersController extends Controller
             ];
 
             Mail::to($user->email, $user->firstname)->send(new OrderSuccessMail($data));
+
+            //get referrer
+            $referrer = User::find($user->referrer_id);
+            //check if referrer exists or if user has purchased before
+            //send mail to referrer and add 2points if the order is first time
+            if (sizeof($check_order) == 0 && $referrer) {
+                //increase points by 2
+                $referrer->points += 2;
+                $referrer->update();
+                $referrer_data = [
+                    'firstname' => $referrer->firstname,
+                    'points' => $referrer->points,
+                ];
+                //send mail to the person that referred
+                Mail::to($referrer->email, $referrer->firstname)->send(new TwoPointsMail($referrer_data));
+            }
 
             return $this->sendResponse($order, 'Order created successfully', 201);
         } catch (\Exception $e) {

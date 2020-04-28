@@ -19,7 +19,7 @@ class ProfileController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware('auth:api', ['except' => ['getPoints']]);
     }
 
     /**
@@ -188,6 +188,21 @@ class ProfileController extends Controller
             $data = collect(json_decode(utf8_decode($res->getBody()->getContents()), true));
             return $this->sendResponse($data, 'Verification Request');
         } catch (\Exception  $e) {
+            return $this->sendError('error', $e->getMessage(), 409);
+        }
+    }
+
+    //read users points
+    /**
+     * Read users points
+     * @return Response
+     */
+    public function getPoints()
+    {
+        try {
+            $users = User::select('id', 'firstname', 'lastname', 'points')->orderBy('points', 'desc')->get();
+            return $this->sendResponse($users, 'Users points fetched successfully');
+        } catch (\Exception $e) {
             return $this->sendError('error', $e->getMessage(), 409);
         }
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OnePointMail;
 use App\Mail\VerificationEmail;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions as Tymon;
@@ -10,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Ramsey\Uuid\Uuid;
 use App\User;
 
 class AuthController extends Controller
@@ -51,14 +53,18 @@ class AuthController extends Controller
         try {
             //validate incoming request
             $validator = Validator::make($request->all(), User::$registrationRules);
+            //get referrer
+            $referrer = User::where(['referral_token' => $request->input('referrer')])->first();
             if ($validator->fails()) {
                 return $this->sendError('validation error', $validator->errors(), 422);
             }
             $user = new User;
             $user->firstname = $request->input('firstname');
             $user->lastname = $request->input('lastname');
+            $user->referral_token = Uuid::uuid1();
             $user->email = $request->input('email');
             $user->password = app('hash')->make($request->input('password'));
+            $user->referrer_id =  $referrer ? $referrer->id : null;
             $user->save();
             //generate verification code
             $verification_code = Str::random(30);
@@ -72,6 +78,19 @@ class AuthController extends Controller
             ];
 
             Mail::to($user->email, $user->firstname)->send(new VerificationEmail($data));
+
+            //add 1 point to the refferee points
+            $referrer->points += 1;
+            $referrer->update();
+
+            $referrer_data = [
+                'firstname' => $referrer->firstname,
+                'points' => $referrer->points,
+            ];
+
+            //send mail to the person that referred
+            Mail::to($referrer->email, $referrer->firstname)->send(new OnePointMail($referrer_data));
+
 
             //return successful
             return $this->sendResponse(

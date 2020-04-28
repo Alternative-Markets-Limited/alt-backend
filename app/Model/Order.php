@@ -16,7 +16,7 @@ class Order extends Model
     /**
      * The sets a relationship with users
      *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
@@ -26,7 +26,7 @@ class Order extends Model
     /**
      * The sets a relationship with properties
      *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function property()
     {
