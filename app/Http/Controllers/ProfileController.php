@@ -34,7 +34,10 @@ class ProfileController extends Controller
             $path,
             [
                 'public_id' => strtolower($firstname . '-' . Str::random(10) . '.' . $extension),
-                'folder' => 'alt_avatars'
+                'folder' => 'alt_avatars',
+                "width" => 100,
+                "height" => 100,
+                "crop" => "thumb",
             ]
         );
         return $image;
