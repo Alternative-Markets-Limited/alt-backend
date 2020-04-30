@@ -61,17 +61,17 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
 
     public static $updateProfileRules = [
-        'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg',
         'phone' => 'required|regex:/^[0]\\d{10}$/|min:10',
-        'address' => 'max:255',
-        'occupation' => 'max:255',
+        'address' => 'string|max:255',
+        'occupation' => 'string|max:255',
     ];
 
     public static $createProfileRules = [
-        'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg',
         'phone' => 'required|regex:/^[0]\\d{10}$/|min:10',
-        'address' => 'max:255',
-        'occupation' => 'max:255',
+        'address' => 'string|max:255',
+        'occupation' => 'string|max:255',
         'birthday' => 'required|date_format:Y-m-d|before:today',
         'bvn' => 'required|numeric',
     ];
