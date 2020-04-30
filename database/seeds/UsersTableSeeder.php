@@ -14,9 +14,9 @@ class UsersTableSeeder extends Seeder
     {
         //admin
         App\User::create([
-            'firstname' => 'Ayokunle',
-            'lastname' => 'Adesanya',
-            'email' => 'adesanyaayokunle@gmail.com',
+            'firstname' => 'Alt',
+            'lastname' => 'Admin',
+            'email' => 'admin@gmail.com',
             'password' => app('hash')->make('password'),
             'referral_token' =>  Uuid::uuid1(),
             'is_verified' => 1,
