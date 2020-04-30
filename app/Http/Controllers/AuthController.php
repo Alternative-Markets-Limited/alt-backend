@@ -54,7 +54,6 @@ class AuthController extends Controller
             //validate incoming request
             $validator = Validator::make($request->all(), User::$registrationRules);
             //get referrer
-            $referrer = User::where(['referral_token' => $request->input('referrer')])->first();
             if ($validator->fails()) {
                 return $this->sendError('validation error', $validator->errors(), 422);
             }
@@ -64,7 +63,21 @@ class AuthController extends Controller
             $user->referral_token = Uuid::uuid1();
             $user->email = $request->input('email');
             $user->password = app('hash')->make($request->input('password'));
-            $user->referrer_id =  $referrer ? $referrer->id : null;
+            if ($request->has('referrer')) {
+                $referrer = User::where(['referral_token' => $request->input('referrer')])->first();
+                $user->referrer_id =  $referrer->id;
+                //add 1 point to the refferee points
+                $referrer->points += 1;
+                $referrer->update();
+
+                $referrer_data = [
+                    'firstname' => $referrer->firstname,
+                    'points' => $referrer->points,
+                ];
+
+                //send mail to the person that referred
+                Mail::to($referrer->email, $referrer->firstname)->send(new OnePointMail($referrer_data));
+            }
             $user->save();
             //generate verification code
             $verification_code = Str::random(30);
@@ -78,19 +91,6 @@ class AuthController extends Controller
             ];
 
             Mail::to($user->email, $user->firstname)->send(new VerificationEmail($data));
-
-            //add 1 point to the refferee points
-            $referrer->points += 1;
-            $referrer->update();
-
-            $referrer_data = [
-                'firstname' => $referrer->firstname,
-                'points' => $referrer->points,
-            ];
-
-            //send mail to the person that referred
-            Mail::to($referrer->email, $referrer->firstname)->send(new OnePointMail($referrer_data));
-
 
             //return successful
             return $this->sendResponse(

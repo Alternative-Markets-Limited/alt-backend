@@ -51,12 +51,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public static $registrationRules = [
         'firstname' => 'required|string|max:255',
         'lastname' => 'required|string|max:255',
-        'email' => 'required|email|unique:users',
+        'email' => 'required|string|unique:users|regex:/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/',
         'password' => 'required|min:6|max:22',
     ];
 
     public static $loginRules = [
-        'email' => 'required|email|string',
+        'email' => 'required|string|regex:/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/',
         'password' => 'required|string'
     ];
 
@@ -78,6 +78,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public static $verifyBvnRules = [
         'surname' => 'required',
+        'firstname' => 'required',
         'dob' => 'required',
         'bvn' => 'required',
         'callbackURL' => 'required',
