@@ -69,7 +69,9 @@ class ProfileController extends Controller
             $user->phone = $request->input('phone');
             $user->birthday  = $request->input('birthday');
             $user->address = $request->input('address');
-            $user->occupation = $request->input('occupation');
+            if ($request->has('occupation')) {
+                $user->occupation = $request->input('occupation');
+            }
             $user->bvn = $request->input('bvn'); //TODO: verify bvn before sending in the frontend
             $user->save();
 
@@ -166,6 +168,7 @@ class ProfileController extends Controller
             }
             //get the firstname, surname, bvn, dob callbackURL
             $surname = $request->input('surname');
+            $firstname = $request->input('firstname');
             $dob = $request->input('dob');
             $bvn = $request->input('bvn');
             $callbackURL = $request->input('callbackURL');
@@ -175,6 +178,7 @@ class ProfileController extends Controller
             $res = $client->request('POST', $url, [
                 'json' => [
                     'surname' => $surname,
+                    'firstname' => $firstname,
                     'dob' => $dob,
                     'bvn' => $bvn,
                     'callbackURL' => $callbackURL,
