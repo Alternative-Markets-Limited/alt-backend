@@ -181,6 +181,7 @@ class AuthController extends Controller
             $user->update(['is_verified' => 1]);
             DB::table('user_verifications')->where('token', $verification_code)->delete();
             $successPath = getenv('WEBSITE_URL') . '/verification-successful';
+            //Send account created successful email
             return redirect()->to($successPath);
         }
         $errorPath = getenv('WEBSITE_URL') . '/verification-error';

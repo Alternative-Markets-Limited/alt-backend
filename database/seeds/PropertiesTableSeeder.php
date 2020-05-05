@@ -13,6 +13,7 @@ class PropertiesTableSeeder extends Seeder
     {
         App\Model\Property::create([
             'name' => 'Dummy Property',
+            'slug' => 'dummy-property',
             'image' => 'https://res.cloudinary.com/altdotng/image/upload/v1588259541/alt_avatars/construction_dnf9rv.jpg',
             'about' => 'The description of the property',
             'brochure' => 'https://res.cloudinary.com/altdotng/image/upload/v1588259541/alt_avatars/construction_dnf9rv.jpg',
