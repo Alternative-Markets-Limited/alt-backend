@@ -70,6 +70,17 @@ class OrdersController extends Controller
             $auth_user = User::find(Auth::id());
             $check_order = $auth_user->orders()->get();
 
+            //check if fractions are more than 200
+            $fractions_total = array_reduce(array_map(function ($order) {
+                return ($order['fractions_qty']);
+            }, $check_order->where('property_id', $property_id)->toArray()), function ($acc, $val) {
+                return $val + $acc;
+            }, 0);
+
+            if ($fractions_total + $fractions_qty > 200) {
+                return $this->sendError("You can't purchase more than 200 fractions", null, 409);
+            };
+
             $order = new Order;
             $order->property_id = $request->input('property_id');
             $order->user_id = Auth::id();
@@ -118,7 +129,7 @@ class OrdersController extends Controller
 
             return $this->sendResponse($order, 'Order created successfully', 201);
         } catch (\Exception $e) {
-            return $this->sendError('error', $e->getMessage(), 409);
+            return $this->sendError('Oops!, Something went wrong', $e->getMessage(), 409);
         }
     }
 

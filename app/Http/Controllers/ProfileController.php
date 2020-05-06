@@ -75,7 +75,7 @@ class ProfileController extends Controller
             if ($request->has('occupation')) {
                 $user->occupation = $request->input('occupation');
             }
-            $user->bvn = $request->input('bvn'); //TODO: verify bvn before sending in the frontend
+            $user->bvn = $request->input('bvn');
             $user->save();
 
             return $this->sendResponse($user, 'Profile created successfully');
