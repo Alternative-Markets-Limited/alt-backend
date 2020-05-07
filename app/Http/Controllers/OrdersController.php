@@ -63,7 +63,7 @@ class OrdersController extends Controller
 
             //check if fraction qty is ideal
             if ($property->investment_population < $fractions_qty) {
-                return $this->sendError('Fractions requested in not available', null, 409);
+                return $this->sendError('Fractions requested is not available', null, 409);
             }
 
             //check order
@@ -78,7 +78,7 @@ class OrdersController extends Controller
             }, 0);
 
             if ($fractions_total + $fractions_qty > 200) {
-                return $this->sendError("You can't purchase more than 200 fractions", null, 409);
+                return $this->sendError("You can't purchase more than 200 fractions of the same property", null, 409);
             };
 
             $order = new Order;
