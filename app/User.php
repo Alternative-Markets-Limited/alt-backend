@@ -73,7 +73,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'address' => 'string|max:255',
         'occupation' => 'string|max:255',
         'birthday' => 'required|date_format:Y-m-d|before:today',
-        'bvn' => 'required|numeric',
+        'bvn' => 'required|string',
     ];
 
     public static $verifyBvnRules = [

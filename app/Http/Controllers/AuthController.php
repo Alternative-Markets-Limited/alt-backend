@@ -191,6 +191,7 @@ class AuthController extends Controller
             Mail::to($user->email, $user->firstname)->send(new ConfirmationEmail($data));
 
             $successPath = getenv('WEBSITE_URL') . '/verification-successful';
+            //Send account created successful email
             return redirect()->to($successPath);
         }
         $errorPath = getenv('WEBSITE_URL') . '/verification-error';
