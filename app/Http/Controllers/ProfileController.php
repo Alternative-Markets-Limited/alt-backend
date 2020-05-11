@@ -75,6 +75,7 @@ class ProfileController extends Controller
             if ($request->has('occupation')) {
                 $user->occupation = $request->input('occupation');
             }
+
             $user->bvn = app('hash')->make($request->input('bvn'));
             $user->save();
 

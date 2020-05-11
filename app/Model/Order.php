@@ -41,8 +41,7 @@ class Order extends Model
 
     public static $createOrderRules = [
         'property_id' => 'required|numeric',
-        'fractions_qty' => 'required|numeric|gte:1',
+        'fractions_qty' => 'required|numeric|gte:1|lte:200',
         'price' => 'required|numeric',
-
     ];
 }
