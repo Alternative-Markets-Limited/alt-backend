@@ -72,8 +72,15 @@ class ProfileController extends Controller
             $user->phone = $request->input('phone');
             $user->birthday  = $request->input('birthday');
             $user->address = $request->input('address');
+
             if ($request->has('occupation')) {
                 $user->occupation = $request->input('occupation');
+            }
+
+            if ($request->has('firstname') || $request->has('lastname')) {
+                $user->firstname = $request->input('firstname');
+                $user->lastname = $request->input('lastname');
+                $user->update();
             }
 
             $user->bvn = app('hash')->make($request->input('bvn'));
