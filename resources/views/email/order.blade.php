@@ -237,6 +237,9 @@
                                                 <strong> Total Price: </strong> {{$data['price']}}
                                             </tr> <br><br>
                                             <tr>
+                                                <strong> Expected Yield: </strong> {{$data['expected_yield']}}
+                                            </tr> <br><br>
+                                            <tr>
                                                 <strong> Expected Returns: </strong> {{$data['expected_returns']}}
                                             </tr> <br><br>
                                             <tr>

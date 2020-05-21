@@ -21,10 +21,10 @@ class CreatePropertiesTable extends Migration
             $table->string('brochure')->nullable();
             $table->string('location');
             $table->bigInteger('investment_population');
-            $table->bigInteger('net_rental_yield');
+            $table->json('net_rental_yield');
             $table->bigInteger('min_yield');
             $table->bigInteger('max_yield');
-            $table->integer('holding_period');
+            $table->json('holding_period');
             $table->bigInteger('min_fraction_price');
             $table->bigInteger('max_fraction_price');
             $table->integer('category_id');

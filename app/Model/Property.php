@@ -25,6 +25,8 @@ class Property extends Model
      */
     protected $casts = [
         'gallery' => 'array',
+        'holding_period' => 'array',
+        'net_rental_yield' => 'array',
         'facility' => 'array',
         'gallery_public_id' => 'array'
     ];
@@ -63,10 +65,12 @@ class Property extends Model
         'brochure' => 'file|max:10000|mimetypes:application/pdf',
         'location' => 'required|string|max:255',
         'investment_population' => 'required|numeric',
-        'net_rental_yield' => 'required|numeric',
+        'net_rental_yield.*' => 'required|numeric|min:1|max:99.99',
+        'net_rental_yield' => 'array',
         'min_yield' => 'required|numeric',
         'max_yield' => 'required|numeric',
-        'holding_period' => 'required|numeric',
+        'holding_period' => 'array',
+        'holding_period.*' => 'required|numeric|gte:1',
         'min_fraction_price' => 'required|numeric|gte:100000',
         'max_fraction_price' => 'required|numeric|lte:15000000',
         'category_id' => 'required|numeric',
