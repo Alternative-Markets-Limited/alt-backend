@@ -81,12 +81,18 @@ class OrdersController extends Controller
                 return $this->sendError("You can't purchase more than 200 fractions of the same property", null, 409);
             };
 
+            //validate yield period
+            if (!in_array($request->input('yield_period'), $property->holding_period)) {
+                return $this->sendError("Yield period not allowed", null, 409);
+            }
+
             $order = new Order;
             $order->property_id = $request->input('property_id');
             $order->user_id = Auth::id();
             $order->fractions_qty = $request->input('fractions_qty');
+            $order->yield_period = $request->input('yield_period');
             $order->price = $request->input('price');
-            $order->end_date = Carbon::now()->addYear($property->holding_period);
+            $order->end_date = Carbon::now()->addMonth($request->input('yield_period'));
             $order->save();
 
             //reduce the property fraction qty
@@ -96,13 +102,15 @@ class OrdersController extends Controller
             //Send email
             $user =  Auth::user();
             $props = $order->property()->get();
-            $expected_returns = (($props[0]->net_rental_yield / 100) * $order->price) + $order->price;
+
+            $expected_returns = $this->expectedCash($props[0]->net_rental_yield[$order->yield_period], $order->price);
             $order->expected_returns = $expected_returns;
             $order->update();
             $data = [
                 'property_name' => $props[0]->name,
                 'fraction_qty' => $order->fractions_qty,
                 'price' => $this->formatMoney($order->price),
+                'expected_yield' => $order->yield_period,
                 'expected_returns' => $this->formatMoney($expected_returns),
                 'end_date' => $order->end_date->toDayDateTimeString(),
                 'firstname' => $user->firstname,
