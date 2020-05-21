@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Cache;
 use App\Model\Property;
 use Cloudinary\Uploader;
 use Illuminate\Support\Str;
@@ -254,20 +255,21 @@ class PropertiesController extends Controller
     public function allProperties()
     {
         try {
-            $properties = Property::with('category')->select(
-                'id',
-                'name',
-                'slug',
-                'image',
-                'investment_population',
-                'net_rental_yield',
-                'min_fraction_price',
-                'min_yield',
-                'max_yield',
-                'category_id',
-                'about'
-            )->get();
-
+            $properties = Cache::remember('properties', 1800, function () {
+                return Property::with('category')->select(
+                    'id',
+                    'name',
+                    'slug',
+                    'image',
+                    'investment_population',
+                    'net_rental_yield',
+                    'min_fraction_price',
+                    'min_yield',
+                    'max_yield',
+                    'category_id',
+                    'about'
+                )->get();
+            });
             return $this->sendResponse($properties, 'Property fetched successfully');
         } catch (\Exception $e) {
             return $this->sendError('error', $e->getMessage(), 409);
@@ -282,7 +284,9 @@ class PropertiesController extends Controller
     public function showProperty($slug)
     {
         try {
-            $property = Property::with('category')->where('slug', $slug)->first();
+            $property = Cache::remember('property:' . $slug, 1800, function () use ($slug) {
+                return Property::with('category')->where('slug', $slug)->first();
+            });
             if (!$property) {
                 return $this->sendError('Property not found', null, 404);
             }
