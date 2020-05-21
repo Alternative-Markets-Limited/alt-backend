@@ -102,4 +102,15 @@ class Controller extends BaseController
             ->where('id', '<>', $id)
             ->get();
     }
+
+    /**
+     * @param int $yield
+     * @param int $price
+     * @return int $price
+     */
+    public function expectedCash($yield, $price)
+    {
+        $expected_returns = (($yield / 100) * $price) + $price;
+        return $expected_returns;
+    }
 }
