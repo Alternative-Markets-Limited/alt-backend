@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Ramsey\Uuid\Uuid;
 use App\User;
+use Illuminate\Support\Facades\Cache;
 
 class AuthController extends Controller
 {
@@ -142,7 +143,6 @@ class AuthController extends Controller
      */
     public function user()
     {
-
         try {
             $user = Auth::user();
             return $this->sendResponse($user, 'User Fetched');
@@ -160,6 +160,7 @@ class AuthController extends Controller
     {
         try {
             Auth::logout();
+            Cache::flush();
             return $this->sendResponse(null, 'Successfully Logged out');
         } catch (\Exception $e) {
             return $this->sendError('error', $e->getMessage(), 409);

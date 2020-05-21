@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Cache;
 use App\Mail\OrderSuccessMail;
 use App\Mail\TwoPointsMail;
 use Illuminate\Http\Request;
@@ -80,6 +81,8 @@ class OrdersController extends Controller
             if ($fractions_total + $fractions_qty > 200) {
                 return $this->sendError("You can't purchase more than 200 fractions of the same property", null, 409);
             };
+
+            Cache::forget('user:' . $auth_user->id);
 
             //validate yield period
             if (!in_array($request->input('yield_period'), $property->holding_period)) {

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 
@@ -27,7 +27,9 @@ class UsersController extends Controller
     {
         try {
             $user = User::find(Auth::id());
-            $user_orders = $user->orders()->with(['property.category'])->get();
+            $user_orders = Cache::remember('user:' . $user->id, 1800, function () use ($user) {
+                return $user->orders()->with(['property.category'])->get();
+            });
             return $this->sendResponse($user_orders, 'Orders fetched successfully');
         } catch (\Exception $e) {
             return $this->sendError('error', $e->getMessage(), 409);
