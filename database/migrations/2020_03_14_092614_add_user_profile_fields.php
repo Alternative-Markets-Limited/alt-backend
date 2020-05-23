@@ -22,6 +22,8 @@ class AddUserProfileFields extends Migration
             $table->text('address')->nullable();
             $table->string('public_id')->nullable();
             $table->bigInteger('points')->nullable()->default(0);
+            $table->string('bank_name')->nullable();
+            $table->string('account_number')->nullable();
         });
     }
 
@@ -40,6 +42,9 @@ class AddUserProfileFields extends Migration
             $table->dropColumn('occupation');
             $table->dropColumn('address');
             $table->dropColumn('public_id');
+            $table->dropColumn('points');
+            $table->dropColumn('bank_name');
+            $table->dropColumn('account_number');
         });
     }
 }

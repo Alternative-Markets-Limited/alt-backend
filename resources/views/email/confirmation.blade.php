@@ -5,7 +5,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Two Points</title>
+    <title>Confirmation Message</title>
     <style type="text/css" rel="stylesheet" media="all">
         /* Base ------------------------------ */
         *:not(br):not(tr):not(html) {
@@ -108,14 +108,14 @@
             padding: 35px;
         }
 
+        .align-right {
+            text-align: right;
+        }
+
         .logo {
             margin-bottom: 15px;
             height: 165px;
-            width: 150px
-        }
-
-        .align-right {
-            text-align: right;
+            width: 150px;
         }
 
         /* Type ------------------------------ */
@@ -222,81 +222,54 @@
                                 <tr>
                                     <td class="content-cell">
                                         <h1>Hello {{ $data['firstname'] }},</h1>
-                                        <h3>Someone you referred just purchased alts. You have
-                                            been awarded 2 points
-                                        </h3>
-                                        <p>You now have {{$data['points']}} points</p>
+                                        <h3>Account Confirmation</h3>
+                                        <p>Thanks for signing up to be part of our family.
+                                            Be sure to go through our offerings, you'll find something suited for your
+                                            investment needs.
+                                            Have questions? Send an email to us at <a
+                                                href="mailto:hello@alt.ng">hello@alt.ng</a> or contact +2347039573037.
+                                        </p>
                                         <!-- Action -->
                                         <table class="body-action" align="center" width="100%" cellpadding="0"
                                             cellspacing="0">
                                             <tr>
                                                 <td align="center">
                                                     <div>
-                                                        <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href=href={{getenv('WEBSITE_URL')}} style="height:45px;v-text-anchor:middle;width:200px;" arcsize="7%" stroke="f" fill="t">
-                                                                    <v:fill type="tile" color="#414EF9" />
-                                                                    <w:anchorlock/>
-                                                                    <center style="color:#ffffff;font-family:sans-serif;font-size:15px;">Go to Website</center>
-                                                                  </v:roundrect><![endif]-->
+                                                        <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href={{getenv('WEBSITE_URL')}} style="height:45px;v-text-anchor:middle;width:200px;" arcsize="7%" stroke="f" fill="t">
+                                                                                    <v:fill type="tile" color="#414EF9" />
+                                                                                    <w:anchorlock/>
+                                                                                    <center style="color:#ffffff;font-family:sans-serif;font-size:15px;">Go to Website</center>
+                                                                                  </v:roundrect><![endif]-->
                                                         <a href={{getenv('WEBSITE_URL')}}
                                                             class="button button--green">Go to Website</a>
                                                     </div>
                                                 </td>
                                             </tr>
                                         </table>
-                                        {{-- <table class="body-action" align="center" width="100%" cellpadding="0"
-                                            cellspacing="0">
-                                            <tr>
-                                                <strong> Property Name: </strong> {{$data['property_name']}}
-                                </tr> <br><br>
-                                <tr>
-                                    <strong> Fractions: </strong> {{$data['fraction_qty']}}
-                                </tr> <br><br>
-                                <tr>
-                                    <strong> Total Price: </strong> {{$data['price']}}
-                                </tr> <br><br>
-                                <tr>
-                                    <strong> Expected Returns: </strong> {{$data['expected_returns']}}
-                                </tr> <br><br>
-                                <tr>
-                                    <strong> Maturity Date: </strong> {{$data['end_date']}}
-                                </tr><br><br>
-                                <tr>
-                                    <td align="center">
-                                        <div>
-                                            <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="#" style="height:45px;v-text-anchor:middle;width:200px;" arcsize="7%" stroke="f" fill="t">
-                            <v:fill type="tile" color="#414EF9" />
-                            <w:anchorlock/>
-                            <center style="color:#ffffff;font-family:sans-serif;font-size:15px;">Go to Website</center>
-                          </v:roundrect><![endif]-->
-                                            <a href="#" class="button button--green">Go to Website</a>
-                                        </div>
+                                        <p>Thanks,<br>The Alt Team</p>
                                     </td>
                                 </tr>
-                            </table> --}}
-                            <p>Thanks,<br>The Alt Team</p>
+                            </table>
                         </td>
                     </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td class="content-cell">
-                            <p class="sub center">
-                                Alternative Markets Limited.
-                                <br>2, Cornelius Odinjor Crescent, Bera Estate, off Chevron Drive, Lekki,
-                                Lagos, Nigeria
-                            </p>
+                        <td>
+                            <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="content-cell">
+                                        <p class="sub center">
+                                            Alternative Markets Limited.
+                                            <br>2, Cornelius Odinjor Crescent, Bera Estate, off Chevron Drive, Lekki,
+                                            Lagos, Nigeria
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                 </table>
             </td>
         </tr>
-    </table>
-    </td>
-    </tr>
     </table>
 </body>
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Cache;
 use App\Model\Property;
 use Cloudinary\Uploader;
 use Illuminate\Support\Str;
@@ -65,7 +66,7 @@ class PropertiesController extends Controller
             //create new property
             $property = new Property;
             $property->name = $request->input('name');
-
+            $property->slug = $this->createSlug($request->input('name'));
             //upload image
             if ($request->has('image')) {
                 $extension = $request->image->extension();
@@ -161,6 +162,10 @@ class PropertiesController extends Controller
             // update all fields
             $property->name = $request->input('name');
 
+            if ($property->slug !== $this->createSlug($request->input('name'))) {
+                $property->slug = $this->createSlug($request->input('name'), $id);
+            }
+
             //update image and delete present one from cloudinary
             if ($request->has('image')) {
                 if ($property->public_id) {
@@ -250,19 +255,21 @@ class PropertiesController extends Controller
     public function allProperties()
     {
         try {
-            $properties = Property::with('category')->select(
-                'id',
-                'name',
-                'image',
-                'investment_population',
-                'net_rental_yield',
-                'min_fraction_price',
-                'min_yield',
-                'max_yield',
-                'category_id',
-                'about'
-            )->get();
-
+            $properties = Cache::remember('properties', 1800, function () {
+                return Property::with('category')->select(
+                    'id',
+                    'name',
+                    'slug',
+                    'image',
+                    'investment_population',
+                    'net_rental_yield',
+                    'min_fraction_price',
+                    'min_yield',
+                    'max_yield',
+                    'category_id',
+                    'about'
+                )->get();
+            });
             return $this->sendResponse($properties, 'Property fetched successfully');
         } catch (\Exception $e) {
             return $this->sendError('error', $e->getMessage(), 409);
@@ -274,10 +281,12 @@ class PropertiesController extends Controller
      * Authenticated users can view property in details
      * @return Response
      */
-    public function showProperty($id)
+    public function showProperty($slug)
     {
         try {
-            $property = Property::with('category')->find($id);
+            $property = Cache::remember('property:' . $slug, 1800, function () use ($slug) {
+                return Property::with('category')->where('slug', $slug)->first();
+            });
             if (!$property) {
                 return $this->sendError('Property not found', null, 404);
             }

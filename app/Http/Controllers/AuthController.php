@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ConfirmationEmail;
 use App\Mail\OnePointMail;
 use App\Mail\VerificationEmail;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Ramsey\Uuid\Uuid;
 use App\User;
+use Illuminate\Support\Facades\Cache;
 
 class AuthController extends Controller
 {
@@ -141,7 +143,6 @@ class AuthController extends Controller
      */
     public function user()
     {
-
         try {
             $user = Auth::user();
             return $this->sendResponse($user, 'User Fetched');
@@ -180,7 +181,17 @@ class AuthController extends Controller
             }
             $user->update(['is_verified' => 1]);
             DB::table('user_verifications')->where('token', $verification_code)->delete();
+
+            //send email
+            $data = [
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname,
+            ];
+
+            Mail::to($user->email, $user->firstname)->send(new ConfirmationEmail($data));
+
             $successPath = getenv('WEBSITE_URL') . '/verification-successful';
+            //Send account created successful email
             return redirect()->to($successPath);
         }
         $errorPath = getenv('WEBSITE_URL') . '/verification-error';

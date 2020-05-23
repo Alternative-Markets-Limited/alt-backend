@@ -36,7 +36,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->get('users/points', 'ProfileController@getPoints');
     //Properties
     $router->get('property', 'PropertiesController@allProperties');
-    $router->get('property/{id}', 'PropertiesController@showProperty');
+    $router->get('property/{slug}', 'PropertiesController@showProperty');
     //Orders
     $router->get('user/orders', 'UsersController@allUserOrder');
     $router->get('user/orders/{id}', 'UsersController@oneUserOrder');

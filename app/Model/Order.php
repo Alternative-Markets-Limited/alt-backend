@@ -11,7 +11,7 @@ class Order extends Model
      *
      * @var array
      */
-    protected $fillable = ['property_id', 'fractions_qty', 'price'];
+    protected $fillable = ['property_id', 'fractions_qty', 'price', 'yield_period'];
 
     /**
      * The sets a relationship with users
@@ -41,8 +41,8 @@ class Order extends Model
 
     public static $createOrderRules = [
         'property_id' => 'required|numeric',
-        'fractions_qty' => 'required|numeric|gte:1',
+        'fractions_qty' => 'required|numeric|gte:1|lte:200',
+        'yield_period' => 'required|numeric|gte:1',
         'price' => 'required|numeric',
-
     ];
 }
