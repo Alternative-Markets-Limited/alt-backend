@@ -160,7 +160,6 @@ class AuthController extends Controller
     {
         try {
             Auth::logout();
-            Cache::flush();
             return $this->sendResponse(null, 'Successfully Logged out');
         } catch (\Exception $e) {
             return $this->sendError('error', $e->getMessage(), 409);
