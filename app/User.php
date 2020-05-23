@@ -30,7 +30,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $fillable = [
         'firstname', 'lastname', 'email', 'is_verified', 'avatar', 'phone', 'birthday',
-        'bvn', 'occupation', 'address', 'public_id', 'admin', 'referrer_id', 'referral_token'
+        'bvn', 'occupation', 'address', 'public_id', 'admin', 'referrer_id', 'referral_token',
+        'bank_name', 'account_number', 'old_password'
     ];
 
     /**
@@ -40,6 +41,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $hidden = [
         'password',
+        'public_id',
+        'old_password'
     ];
 
     /**
@@ -62,18 +65,22 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public static $updateProfileRules = [
         'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:8192',
-        'phone' => 'required|regex:/^[0]\\d{10}$/|min:10',
-        'address' => 'string|max:255',
+        'phone' => 'sometimes|required|regex:/^[0]\\d{10}$/|min:10',
+        'address' => 'sometimes|required|string|max:255',
         'occupation' => 'string|max:255',
+        'bank_name' => 'sometimes|required|string|max:255',
+        'account_number' => 'sometimes|required|string|regex:/^[0-9]*$/',
+        'password' => 'sometimes|required|min:6|max:22',
+        'old_password' => 'sometimes|required|string'
     ];
 
     public static $createProfileRules = [
         'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:8192',
         'phone' => 'required|regex:/^[0]\\d{10}$/|min:10',
-        'address' => 'string|max:255',
+        'address' => 'required|string|max:255',
         'occupation' => 'string|max:255',
         'birthday' => 'required|date_format:Y-m-d|before:today',
-        'bvn' => 'required|string',
+        'bvn' => 'required|string|regex:/^[0-9]{11}$/',
     ];
 
     public static $verifyBvnRules = [

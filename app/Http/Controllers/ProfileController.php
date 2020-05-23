@@ -131,10 +131,36 @@ class ProfileController extends Controller
                 $user->public_id = $image['public_id'];
                 $user->avatar = $image['secure_url'];
             }
-            $user->phone = $request->input('phone');
-            $user->address = $request->input('address');
-            $user->occupation = $request->input('occupation');
-            $user->save();
+
+            if ($request->has('bank_name')) {
+                $user->bank_name = $request->input('bank_name');
+            }
+
+            if ($request->has('account_number')) {
+                $user->account_number = $request->input('account_number');
+            }
+
+            if ($request->has('phone')) {
+                $user->phone = $request->input('phone');
+            }
+            if ($request->has('address')) {
+                $user->address = $request->input('address');
+            }
+            if ($request->has('occupation')) {
+                $user->occupation = $request->input('occupation');
+            }
+
+            if ($request->has('old_password') && $request->has('password')) {
+                if (app('hash')->check($request->input('old_password'), $user->password)) {
+                    $user->password = app('hash')->make($request->input('password'));
+                    $user->update();
+                    return $this->sendResponse($user, 'Password updated successfully');
+                } else {
+                    return $this->sendError('password mismatch', "Your password is incorrect", 422);
+                }
+            }
+
+            $user->update();
 
             return $this->sendResponse($user, 'Profile updated successfully');
         } catch (\Exception $e) {
