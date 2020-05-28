@@ -53,6 +53,16 @@ class Property extends Model
     }
 
     /**
+     * The sets a relationship with invoices
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function invoice()
+    {
+        return $this->hasMany('App\Model\Invoice');
+    }
+
+    /**
      * Validation rules.
      *
      * @var array

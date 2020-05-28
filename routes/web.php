@@ -40,8 +40,11 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     //Orders
     $router->get('user/orders', 'UsersController@allUserOrder');
     $router->get('user/orders/{id}', 'UsersController@oneUserOrder');
-    $router->post('orders', 'OrdersController@store');
     $router->post('orders/verify', 'OrdersController@verifyPayment');
+    //Invoices
+    $router->get('user/invoices', 'UsersController@allUserInvoice');
+    $router->get('user/invoices/{id}', 'UsersController@oneUserInvoice');
+    $router->post('invoices', 'InvoicesController@store');
     //Admin Routes
     $router->group(['prefix' => 'admin', 'middleware' => 'admin'], function () use ($router) {
         //Properties
@@ -56,7 +59,12 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->delete('/category/{id}', 'CategoriesController@destroy');
         //Orders
         $router->get('/orders', 'OrdersController@index');
+        $router->post('orders', 'OrdersController@store');
         $router->get('orders/{id}', 'OrdersController@show');
         $router->delete('orders/{id}', 'OrdersController@destroy');
+        //Invoices
+        $router->get('/invoices', 'InvoicesController@index');
+        $router->get('/invoices/{id}', 'InvoicesController@show');
+        $router->delete('/invoices/{id}', 'InvoicesController@destroy');
     });
 });

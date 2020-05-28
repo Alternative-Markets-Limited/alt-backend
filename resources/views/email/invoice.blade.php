@@ -5,7 +5,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Order Confirmation</title>
+    <title>Invoice Created</title>
     <style type="text/css" rel="stylesheet" media="all">
         /* Base ------------------------------ */
         *:not(br):not(tr):not(html) {
@@ -222,9 +222,8 @@
                                 <tr>
                                     <td class="content-cell">
                                         <h1>Hello {{ $data['firstname'] }},</h1>
-                                        <h3>The order with invoice number {{$data['invoice_number']}} has been confirmed
-                                        </h3>
-                                        <p>Find below the details of your investment</p>
+                                        <h3>Your invoice number is {{$data['invoice_number']}}</h3>
+                                        <p>Kindly complete the payment by following the process below</p>
                                         <!-- Action -->
                                         <table class="body-action" align="center" width="100%" cellpadding="0"
                                             cellspacing="0">
@@ -238,14 +237,13 @@
                                                 <strong> Total Price: </strong> {{$data['price']}}
                                             </tr> <br><br>
                                             <tr>
-                                                <strong> Expected Yield: </strong> {{$data['expected_yield']}}
-                                            </tr> <br><br>
-                                            <tr>
-                                                <strong> Expected Returns: </strong> {{$data['expected_returns']}}
-                                            </tr> <br><br>
-                                            <tr>
-                                                <strong> Maturity Date: </strong> {{$data['end_date']}}
+                                                <strong> Due Date: </strong> {{$data['due_date']}}
                                             </tr><br><br>
+                                            <tr>
+                                                <p>Kindly complete your payment to <strong>Bank Details</strong> and
+                                                    send an email to //email// with an evidence
+                                                    of payment and invoice number {{$data['invoice_number']}}</p>
+                                            </tr>
                                             <tr>
                                                 <td align="center">
                                                     <div>
