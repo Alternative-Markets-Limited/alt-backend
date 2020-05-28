@@ -37,6 +37,24 @@ class UsersController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function allUserInvoice()
+    {
+        try {
+            $user = User::find(Auth::id());
+            $user_invoice = Cache::remember('user:' . $user->id, 1800, function () use ($user) {
+                return $user->invoices()->with(['property.category'])->get();
+            });
+            return $this->sendResponse($user_invoice, 'Invoices fetched successfully');
+        } catch (\Exception $e) {
+            return $this->sendError('error', $e->getMessage(), 409);
+        }
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -51,6 +69,26 @@ class UsersController extends Controller
                 return $this->sendError('Order not found', null, 404);
             }
             return $this->sendResponse($user_order, 'Order fetched successfully');
+        } catch (\Exception $e) {
+            return $this->sendError('error', $e->getMessage(), 409);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function oneUserInvoice($id)
+    {
+        try {
+            $user = User::find(Auth::id());
+            $user_invoice = $user->invoices()->with(['property'])->find($id);
+            if (!$user_invoice) {
+                return $this->sendError('Invoice not found', null, 404);
+            }
+            return $this->sendResponse($user_invoice, 'Invoice fetched successfully');
         } catch (\Exception $e) {
             return $this->sendError('error', $e->getMessage(), 409);
         }
