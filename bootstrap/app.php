@@ -128,4 +128,6 @@ $app->router->group([
     require __DIR__ . '/../routes/web.php';
 });
 
+$app->useStoragePath(env('APP_STORAGE', base_path() . '/storage'));
+
 return $app;

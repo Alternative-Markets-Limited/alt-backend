@@ -1,0 +1,4 @@
+/vendor/
+.env
+composer.lock
+altappng-fc37dcbaf7c6.json
