@@ -5,3 +5,4 @@ Homestead.yaml
 .env
 .phpunit.result.cache
 altappng-fc37dcbaf7c6.json
+app.yaml

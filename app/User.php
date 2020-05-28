@@ -158,4 +158,15 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->hasMany('App\Model\Order');
     }
+
+
+    /**
+     * The sets a relationship with invoices
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function invoices()
+    {
+        return $this->hasMany('App\Model\Invoice');
+    }
 }

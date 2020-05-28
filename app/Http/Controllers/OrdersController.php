@@ -54,7 +54,9 @@ class OrdersController extends Controller
             if ($validator->fails()) {
                 return $this->sendError('validation error', $validator->errors(), 422);
             }
+            $invoice_number = $request->input('invoice_number');
             $property_id = $request->input('property_id');
+            $user_id = $request->input('user_id');
             $fractions_qty = $request->input('fractions_qty');
             $property = Property::find($property_id);
             //check if doesnt property exists
@@ -68,8 +70,14 @@ class OrdersController extends Controller
             }
 
             //check order
-            $auth_user = User::find(Auth::id());
-            $check_order = $auth_user->orders()->get();
+            $user = User::find($user_id);
+            $check_order = $user->orders()->get();
+
+            $invoice = $user->invoices()->where('invoice_number', $invoice_number)->first();
+
+            if (!$invoice) {
+                return $this->sendError('Invoice not found for user', null, 404);
+            }
 
             //check if fractions are more than 200
             $fractions_total = array_reduce(array_map(function ($order) {
@@ -82,7 +90,7 @@ class OrdersController extends Controller
                 return $this->sendError("You can't purchase more than 200 fractions of the same property", null, 409);
             };
 
-            Cache::forget('user:' . $auth_user->id);
+            Cache::forget('user:' . $user->id);
 
             //validate yield period
             if (!in_array($request->input('yield_period'), $property->holding_period)) {
@@ -90,9 +98,10 @@ class OrdersController extends Controller
             }
 
             $order = new Order;
-            $order->property_id = $request->input('property_id');
-            $order->user_id = Auth::id();
-            $order->fractions_qty = $request->input('fractions_qty');
+            $order->property_id = $property_id;
+            $order->user_id = $user_id;
+            $order->invoice_number = $invoice_number;
+            $order->fractions_qty = $fractions_qty;
             $order->yield_period = $request->input('yield_period');
             $order->price = $request->input('price');
             $order->end_date = Carbon::now()->addMonth($request->input('yield_period'));
@@ -101,6 +110,10 @@ class OrdersController extends Controller
             //reduce the property fraction qty
             $property->investment_population -= $fractions_qty;
             $property->update();
+
+            //update paid status in invoice
+            $invoice->status = 1;
+            $invoice->update();
 
             //Send email
             $user =  Auth::user();
@@ -111,6 +124,7 @@ class OrdersController extends Controller
             $order->update();
             $data = [
                 'property_name' => $props[0]->name,
+                'invoice_number' => $invoice_number,
                 'fraction_qty' => $order->fractions_qty,
                 'price' => $this->formatMoney($order->price),
                 'expected_yield' => $order->yield_period,

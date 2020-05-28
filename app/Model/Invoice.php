@@ -4,14 +4,14 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class Invoice extends Model
 {
     /**
      * sets field that are mass assignable
      *
      * @var array
      */
-    protected $fillable = ['property_id', 'user_id', 'invoice_number', 'fractions_qty', 'price', 'yield_period'];
+    protected $fillable = ['property_id', 'fractions_qty', 'price', 'yield_period'];
 
     /**
      * The sets a relationship with users
@@ -39,10 +39,8 @@ class Order extends Model
      * @var array
      */
 
-    public static $createOrderRules = [
+    public static $createInvoiceRules = [
         'property_id' => 'required|numeric',
-        'user_id' => 'required|numeric',
-        'invoice_number' => 'required|numeric',
         'fractions_qty' => 'required|numeric|gte:1|lte:200',
         'yield_period' => 'required|numeric|gte:1',
         'price' => 'required|numeric',
