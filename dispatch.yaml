@@ -1,0 +1,6 @@
+dispatch:
+  - url: "alt.ng/api/*"
+    service: default
+
+  - url: "alt.ng/*"
+    service: frontend

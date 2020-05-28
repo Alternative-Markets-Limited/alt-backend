@@ -1,0 +1,67 @@
+runtime: php
+env: flex
+
+runtime_config:
+  document_root: public
+  enable_stackdriver_integration: true
+
+env_variables:
+  APP_NAME: Alternative Markets Limited
+  APP_ENV: production
+  APP_DEBUG: false
+  APP_URL: https://altappng.uc.r.appspot.com
+  APP_TIMEZONE: UTC
+  APP_LOG: daily
+  APP_KEY: base64:hu1M61lIvieYD0UcyZn5pPTiCnxOY6fZe59LAgXH9y4=
+  MAIL_DRIVER: smtp
+  MAIL_HOST: smtp.mailgun.org
+  MAIL_PORT: 587
+  MAIL_USERNAME: postmaster@mg.alt.ng
+  MAIL_PASSWORD: 523d2e93284d1078e35262e7d997d300-aa4b0867-ae12d29d
+  MAIL_FROM_ADDRESS: hello@alt.ng
+  MAIL_FROM_NAME: "Alternative Markets Limited"
+  CACHE_DRIVER: redis
+  REDIS_CLIENT: predis
+  QUEUE_CONNECTION: sync
+  CLOUDINARY_API_KEY: 832289984172497
+  CLOUDINARY_API_SECRET: lIC1eZ14QCTQoS_YJnsG-f0cfWo
+  CLOUDINARY_CLOUD_NAME: altdotng
+  TEST_VERIFY_URL: https://ravesandboxapi.flutterwave.com/flwv3-pug/getpaidx/api/v2/verify
+  LIVE_VERIFY_URL: https://api.ravepay.co/flwv3-pug/getpaidx/api/v2/verify
+  FLUTTERWAVE_PUBLIC_KEY: FLWPUBK_TEST-62738188c35db786b68001dacf36b13c-X
+  FLUTTERWAVE_SECRET_KEY: FLWSECK_TEST-45c408de1313018f4ddec929de174ba8-X
+  FLUTTERWAVE_ENCRYPTION_KEY: FLWSECK_TEST95aa7f44e2b9
+  VERIFY_NG_URL: https://app.verified.ng/sfx-verify/v2/bvn
+  VERIFY_NG_API_KEY: $qoaI4kV8Ajt4sMv
+  VERIFY_NG_USER_ID: 1586866619757
+  JWT_SECRET: H5VK1D1arWAcFLXTwuiZ4wqUKMKMHynHRRqSFJWBhJdWh2HGG1GyRmN0QcQW7O0z
+  WEBSITE_URL: https://frontend-dot-altappng.uc.r.appspot.com
+  GOOGLE_VISION_PROJECT_ID: altdotng
+  REDIS_HOST: 10.45.244.67
+  REDIS_PORT: 6379
+  DB_DATABASE: alt-production
+  DB_USERNAME: root
+  DB_PASSWORD: eOfuanMDKlOxHqve
+  DB_SOCKET: "/cloudsql/altappng:us-central1:alt-db"
+
+beta_settings:
+  cloud_sql_instances: altappng:us-central1:alt-db
+
+network:
+  name: default
+
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 2
+  cool_down_period_sec: 180
+  cpu_utilization:
+    target_utilization: 0.6
+
+resources:
+  cpu: 2
+  memory_gb: 2.5
+  disk_size_gb: 10
+  volumes:
+    - name: ramdisk1
+      volume_type: tmpfs
+      size_gb: 0.5
