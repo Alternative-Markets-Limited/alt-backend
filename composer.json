@@ -20,7 +20,7 @@
         "laravel/lumen-framework": "^6.0",
         "laravelista/lumen-vendor-publish": "^6.0",
         "predis/predis": "^1.1",
-        "ramsey/uuid": "^3.9",
+        "ramsey/uuid": "^3 || ^4",
         "tymon/jwt-auth": "dev-develop"
     },
     "require-dev": {
