@@ -90,8 +90,7 @@ class OrdersController extends Controller
                 return $this->sendError("You can't purchase more than 200 fractions of the same property", null, 409);
             };
 
-            Cache::forget('order:' . $user->id);
-            Cache::forget('invoice:' . $user->id);
+            Cache::flush();
 
             //validate yield period
             if (!in_array($request->input('yield_period'), $property->holding_period)) {
@@ -117,7 +116,6 @@ class OrdersController extends Controller
             $invoice->update();
 
             //Send email
-            $user =  Auth::user();
             $props = $order->property()->get();
 
             $expected_returns = $this->expectedCash($props[0]->net_rental_yield[$order->yield_period], $order->price);
