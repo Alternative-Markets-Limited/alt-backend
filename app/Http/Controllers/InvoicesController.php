@@ -81,7 +81,7 @@ class InvoicesController extends Controller
                 return $this->sendError("You can't purchase more than 200 fractions of the same property", null, 409);
             };
 
-            Cache::forget('user:' . $auth_user->id);
+            Cache::forget('invoice:' . $auth_user->id);
 
             //validate yield period
             if (!in_array($request->input('yield_period'), $property->holding_period)) {
@@ -98,7 +98,7 @@ class InvoicesController extends Controller
             $invoice->due_date = Carbon::now()->addDays(3);
             $invoice->save();
 
-            //Send email
+            // Send email
             $user =  Auth::user();
             $props = $invoice->property()->get();
 
