@@ -241,19 +241,21 @@
                                             </tr><br><br>
                                             <tr>
                                                 <p>Kindly complete your payment to <strong>Bank Details</strong> and
-                                                    send an email to //email// with an evidence
+                                                    send an email to <a
+                                                        href="hello@alt.ng?subject=Invoice number {{$data['invoice_number']}}">hello@alt.ng</a>
+                                                    with an evidence
                                                     of payment and invoice number {{$data['invoice_number']}}</p>
                                             </tr>
                                             <tr>
                                                 <td align="center">
                                                     <div>
-                                                        <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href={{getenv('WEBSITE_URL')}} style="height:45px;v-text-anchor:middle;width:200px;" arcsize="7%" stroke="f" fill="t">
+                                                        <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href={{getenv('WEBSITE_URL') . "/invoices"}} style="height:45px;v-text-anchor:middle;width:200px;" arcsize="7%" stroke="f" fill="t">
                             <v:fill type="tile" color="#414EF9" />
                             <w:anchorlock/>
-                            <center style="color:#ffffff;font-family:sans-serif;font-size:15px;">Go to Website</center>
+                            <center style="color:#ffffff;font-family:sans-serif;font-size:15px;">Check your invoices</center>
                           </v:roundrect><![endif]-->
-                                                        <a href={{getenv('WEBSITE_URL')}}
-                                                            class="button button--green">Go to Website</a>
+                                                        <a href={{getenv('WEBSITE_URL') . "/invoices"}}
+                                                            class="button button--green">Check your invoices</a>
                                                     </div>
                                                 </td>
                                             </tr>

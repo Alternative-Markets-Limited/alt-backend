@@ -27,7 +27,7 @@ class UsersController extends Controller
     {
         try {
             $user = User::find(Auth::id());
-            $user_orders = Cache::remember('user:' . $user->id, 1800, function () use ($user) {
+            $user_orders = Cache::remember('order:' . $user->id, 1800, function () use ($user) {
                 return $user->orders()->with(['property.category'])->get();
             });
             return $this->sendResponse($user_orders, 'Orders fetched successfully');
@@ -45,8 +45,8 @@ class UsersController extends Controller
     {
         try {
             $user = User::find(Auth::id());
-            $user_invoice = Cache::remember('user:' . $user->id, 1800, function () use ($user) {
-                return $user->invoices()->with(['property.category'])->get();
+            $user_invoice = Cache::remember('invoice:' . $user->id, 1800, function () use ($user) {
+                return $user->invoices()->with(['property.category'])->orderBy('created_at', 'desc')->get();
             });
             return $this->sendResponse($user_invoice, 'Invoices fetched successfully');
         } catch (\Exception $e) {
