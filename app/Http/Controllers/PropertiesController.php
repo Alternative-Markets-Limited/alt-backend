@@ -256,7 +256,7 @@ class PropertiesController extends Controller
     {
         try {
             $properties = Cache::remember('properties', 1800, function () {
-                return Property::with('category')->select(
+                return Property::with('category:id,name')->select(
                     'id',
                     'name',
                     'slug',
