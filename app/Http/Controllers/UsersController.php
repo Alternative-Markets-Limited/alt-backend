@@ -46,7 +46,7 @@ class UsersController extends Controller
         try {
             $user = User::find(Auth::id());
             $user_invoice = Cache::remember('invoice:' . $user->id, 1800, function () use ($user) {
-                return $user->invoices()->with(['property.category'])->orderBy('created_at', 'desc')->get();
+                return $user->invoices()->with(['property:id,name'])->orderBy('created_at', 'desc')->get();
             });
             return $this->sendResponse($user_invoice, 'Invoices fetched successfully');
         } catch (\Exception $e) {
@@ -84,11 +84,27 @@ class UsersController extends Controller
     {
         try {
             $user = User::find(Auth::id());
-            $user_invoice = $user->invoices()->with(['property'])->find($id);
+            $user_invoice = $user->invoices()->with(['property:id,name'])->find($id);
             if (!$user_invoice) {
                 return $this->sendError('Invoice not found', null, 404);
             }
             return $this->sendResponse($user_invoice, 'Invoice fetched successfully');
+        } catch (\Exception $e) {
+            return $this->sendError('error', $e->getMessage(), 409);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function allUsers()
+    {
+        try {
+            $users = User::all();
+            return $this->sendResponse($users, 'Users fetched successfully');
         } catch (\Exception $e) {
             return $this->sendError('error', $e->getMessage(), 409);
         }

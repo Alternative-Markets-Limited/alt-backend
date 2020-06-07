@@ -34,7 +34,7 @@ class OrdersController extends Controller
     public function index()
     {
         try {
-            $order = Order::with(['property', 'user'])->get();
+            $order = Order::with(['property:id,name', 'user:id,firstname,lastname'])->get();
             return $this->sendResponse($order, 'Orders fetched successfully');
         } catch (\Exception $e) {
             return $this->sendError('error', $e->getMessage(), 409);

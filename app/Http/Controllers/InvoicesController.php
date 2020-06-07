@@ -33,7 +33,7 @@ class InvoicesController extends Controller
     public function index()
     {
         try {
-            $invoice = Invoice::with(['property', 'user'])->get();
+            $invoice = Invoice::with(['property:id,name', 'user:id,firstname,lastname'])->get();
             return $this->sendResponse($invoice, 'Invoices fetched successfully');
         } catch (\Exception $e) {
             return $this->sendError('error', $e->getMessage(), 409);

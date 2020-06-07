@@ -66,5 +66,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/invoices', 'InvoicesController@index');
         $router->get('/invoices/{id}', 'InvoicesController@show');
         $router->delete('/invoices/{id}', 'InvoicesController@destroy');
+        //Users
+        $router->get('/users', 'UsersController@allUsers');
     });
 });
