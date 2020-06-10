@@ -11,6 +11,7 @@
     "require": {
         "php": "^7.2",
         "cloudinary/cloudinary_php": "^1.16",
+        "doctrine/dbal": "^2.10",
         "flipbox/lumen-generator": "^6.0",
         "google/cloud": "^0.132.0",
         "guzzlehttp/guzzle": "^6.5",
