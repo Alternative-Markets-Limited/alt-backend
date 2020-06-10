@@ -71,7 +71,7 @@ class Property extends Model
     public static $propertyRules = [
         'name' => 'required|string|max:255',
         'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'about' => 'required|string|min:10|max:300',
+        'about' => 'required|string|min:10',
         'brochure' => 'file|max:10000|mimetypes:application/pdf',
         'location' => 'required|string|max:255',
         'investment_population' => 'required|numeric',
@@ -82,7 +82,7 @@ class Property extends Model
         'holding_period' => 'array',
         'holding_period.*' => 'required|numeric|gte:1',
         'min_fraction_price' => 'required|numeric|gte:100000',
-        'max_fraction_price' => 'required|numeric|lte:15000000',
+        'max_fraction_price' => 'required|numeric|lte:20000000',
         'category_id' => 'required|numeric',
         'gallery' => 'array',
         'gallery.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
