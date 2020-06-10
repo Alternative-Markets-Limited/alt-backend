@@ -240,7 +240,7 @@
                                                 <strong> Due Date: </strong> {{$data['due_date']}}
                                             </tr><br><br>
                                             <tr>
-                                                <p>Kindly complete your payment to <strong>Bank Details</strong> and
+                                                <p>Kindly complete your payment to <strong>Alternative Markets Limited, Zenith Bank, 1017303698</strong> and
                                                     send an email to <a
                                                         href="hello@alt.ng?subject=Invoice number {{$data['invoice_number']}}">hello@alt.ng</a>
                                                     with an evidence
