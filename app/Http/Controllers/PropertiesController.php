@@ -63,6 +63,8 @@ class PropertiesController extends Controller
             if ($validator->fails()) {
                 return $this->sendError('validation error', $validator->errors(), 422);
             }
+
+            Cache::flush();
             //create new property
             $property = new Property;
             $property->name = $request->input('name');
