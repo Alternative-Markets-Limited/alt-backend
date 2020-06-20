@@ -2,5 +2,8 @@ dispatch:
   - url: "alt.ng/api/*"
     service: default
 
+  - url: "www.alt.ng/*"
+    service: frontend
+
   - url: "alt.ng/*"
     service: frontend
